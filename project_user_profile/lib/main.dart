@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:project_user_profile/Page/notifications_page.dart';
+import 'package:project_user_profile/page/edit_profile_page.dart';
+import 'package:project_user_profile/page/logout_page.dart';
+import 'package:project_user_profile/page/payments_page.dart';
+import 'package:project_user_profile/page/privacy_page.dart';
 
-// Entry point of the application
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-// StatefulWidget for the entire app
+// Main App class converted to StatefulWidget
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -20,35 +24,36 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => MainPage(), // Main page with bottom navigation bar
-        '/editProfile': (context) => EditProfilePage(),
-        '/notifications': (context) => NotificationsPage(),
-        '/privacy': (context) => PrivacyPage(),
-        '/payments': (context) => PaymentsPage(),
-        '/logout': (context) => LogoutPage(),
+        '/': (context) => const MainPage(), // Main page with Bottom Navigation
+        '/editProfile': (context) => const EditProfilePage(),
+        '/notifications': (context) => const NotificationsPage(),
+        '/privacy': (context) => const PrivacyPage(),
+        '/payments': (context) => const PaymentsPage(),
+        '/logout': (context) => const LogoutPage(),
       },
     );
   }
 }
 
-// StatefulWidget for the main page with Bottom Navigation
+// Main Page with Bottom Navigation Bar
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 3; // Start on the Profile Page by default
+  int _selectedIndex = 0;
 
-  // List of pages for each bottom navigation item
+  // Define pages corresponding to the icons
   final List<Widget> _pages = [
-    HomePage(),
-    BusPage(),
-    LocationPage(),
-    ProfilePage(), // Profile page
+    const HomePage(),
+    const BusPage(),
+    const LocationPage(),
+    const ProfilePage(), // Profile Page with buttons to navigate to other pages
   ];
 
-  // Handle tap on Bottom Navigation items
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -58,8 +63,13 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Display the selected page
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Color.fromARGB(255, 176, 174, 174),
+        backgroundColor: Colors.orange, // Set background color to orange
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -78,16 +88,15 @@ class _MainPageState extends State<MainPage> {
             label: 'Profile',
           ),
         ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.brown[800],
-        onTap: _onItemTapped, // Handle item selection
       ),
     );
   }
 }
 
-// ProfilePage StatefulWidget
+// Profile Page as StatefulWidget
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -118,6 +127,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
               ),
+              strutStyle: StrutStyle(
+                fontSize: 20,
+              ),
             ),
           ],
         ),
@@ -126,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
             icon: const Icon(Icons.menu),
             iconSize: 33,
             onPressed: () {
-              // Menu functionality can go here
+              // Add menu functionality here
             },
           ),
         ],
@@ -199,129 +211,142 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
 
-  // Widget for building profile buttons
-  Widget _buildProfileButton({
-    required IconData icon,
-    required String text,
-    required VoidCallback onTap,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.orange.shade100,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Icon(icon, color: Colors.black),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
+// Widget for building buttons on the profile page
+Widget _buildProfileButton({
+  required IconData icon,
+  required String text,
+  required VoidCallback onTap,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.orange.shade100,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.black),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, color: Colors.black),
-            ],
-          ),
+            ),
+            const Icon(Icons.arrow_forward_ios, color: Colors.black),
+          ],
         ),
+      ),
+    ),
+  );
+}
+
+// Sample page for Home
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+              (Route<dynamic> route) => false, // Removes all previous routes
+            );
+          },
+        ),
+      ),
+      body: const Center(
+        child: Text('Home Page'),
       ),
     );
   }
 }
 
-// Edit Profile Page (Placeholder)
-class EditProfilePage extends StatelessWidget {
+// Sample page for Bus
+class BusPage extends StatefulWidget {
+  const BusPage({super.key});
+
+  @override
+  State<BusPage> createState() => _BusPageState();
+}
+
+class _BusPageState extends State<BusPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Profile')),
-      body: const Center(child: Text('Edit Profile Page')),
+      appBar: AppBar(
+        title: const Text('Bus Page'),
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+              (Route<dynamic> route) => false, // Removes all previous routes
+            );
+          },
+        ),
+      ),
+      body: const Center(
+        child: Text('Bus Page'),
+      ),
     );
   }
 }
 
-// Notifications Page (Placeholder)
-class NotificationsPage extends StatelessWidget {
+// Sample page for Location
+class LocationPage extends StatefulWidget {
+  const LocationPage({super.key});
+
+  @override
+  State<LocationPage> createState() => _LocationPageState();
+}
+
+class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Notifications')),
-      body: const Center(child: Text('Notifications Page')),
-    );
-  }
-}
-
-// Privacy Page (Placeholder)
-class PrivacyPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Privacy')),
-      body: const Center(child: Text('Privacy Page')),
-    );
-  }
-}
-
-// Payments Page (Placeholder)
-class PaymentsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Payments')),
-      body: const Center(child: Text('Payments Page')),
-    );
-  }
-}
-
-// Logout Page (Placeholder)
-class LogoutPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Logout')),
-      body: const Center(child: Text('Logout Page')),
-    );
-  }
-}
-
-// Home Page (Placeholder)
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Home Page'),
-    );
-  }
-}
-
-// Bus Page (Placeholder)
-class BusPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Bus Page')),
-      body: const Center(child: Text('Bus Page')),
-    );
-  }
-}
-
-// Location Page (Placeholder)
-class LocationPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Location Page')),
-      body: const Center(child: Text('Location Page')),
+      appBar: AppBar(
+        title: const Text('Location Page'),
+        backgroundColor: Colors.orange,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // Navigate back to ProfilePage
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+              (Route<dynamic> route) => false, // Removes all previous routes
+            );
+          },
+        ),
+      ),
+      body: const Center(
+        child: Text('Location Page'),
+      ),
     );
   }
 }
